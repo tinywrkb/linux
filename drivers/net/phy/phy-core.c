@@ -2,6 +2,7 @@
 /*
  * Core PHY library, taken from phy.c
  */
+#define DEBUG
 #include <linux/export.h>
 #include <linux/phy.h>
 #include <linux/of.h>
@@ -425,12 +426,8 @@ void phy_resolve_aneg_linkmode(struct phy_device *phydev)
 
 	linkmode_and(common, phydev->lp_advertising, phydev->advertising);
 
-	for (i = 0; i < ARRAY_SIZE(settings); i++)
-		if (test_bit(settings[i].bit, common)) {
-			phydev->speed = settings[i].speed;
-			phydev->duplex = settings[i].duplex;
-			break;
-		}
+			phydev->speed = SPEED_100;
+			phydev->duplex = DUPLEX_FULL;
 
 	if (phydev->duplex == DUPLEX_FULL) {
 		phydev->pause = linkmode_test_bit(ETHTOOL_LINK_MODE_Pause_BIT,

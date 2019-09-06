@@ -7,6 +7,7 @@
  * Author: Matus Ujhelyi <ujhelyi.m@gmail.com>
  */
 
+#define DEBUG
 #include <linux/phy.h>
 #include <linux/module.h>
 #include <linux/string.h>
