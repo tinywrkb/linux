@@ -49,3 +49,20 @@
 	model = "SolidRun Cubox-i Solo/DualLite";
 	compatible = "solidrun,cubox-i/dl", "fsl,imx6dl";
 };
+/*
+&fec {
+	phy-handle = <&ethphy>;
+	mdio {
+		#address-cells = <1>;
+		#size-cells = <0>;
+		ethphy: ethernet-phy@0 {
+			compatible = "ethernet-phy-ieee802.3-c22";
+			reg = <0>;
+			max-speed = <100>;
+		};
+	};
+};
+*/
+&ethphy {
+	max-speed = <100>;
+};

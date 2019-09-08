@@ -7,6 +7,7 @@
  * Author: Matus Ujhelyi <ujhelyi.m@gmail.com>
  */
 
+#define DEBUG
 #include <linux/phy.h>
 #include <linux/module.h>
 #include <linux/string.h>
@@ -245,13 +246,39 @@ static int at803x_probe(struct phy_device *phydev)
 	return 0;
 }
 
+static int at803x_get_features(struct phy_device *phydev)
+{
+	int ret, val;
+
+	ret = genphy_read_abilities(phydev);
+	if (ret)
+		return ret;
+/*
+	linkmode_clear_bit(ETHTOOL_LINK_MODE_1000baseT_Half_BIT,
+			 phydev->supported);
+	linkmode_clear_bit(ETHTOOL_LINK_MODE_1000baseT_Full_BIT,
+			 phydev->supported);
+*/
+
+	return 0;
+}
+
 static int at803x_config_init(struct phy_device *phydev)
 {
 	int ret;
+	int phyid;
 
+	printk("cubox_dbg: entered at8030x_config_init");
 	ret = genphy_config_init(phydev);
 	if (ret < 0)
 		return ret;
+
+	phyid = phy_read(phydev, 0x02);
+	printk("cubox_dbg: vendor phyid is %d, hex: %#04x", phyid, phyid);
+	phyid = phy_read(phydev, 0x03);
+	printk("cubox_dbg: product phyid is %d, hex: %#04x", phyid, phyid);
+
+	return ret;
 
 	/* The RX and TX delay default is:
 	 *   after HW reset: RX delay enabled and TX delay disabled
@@ -368,6 +395,7 @@ static struct phy_driver at803x_driver[] = {
 	.name			= "Atheros 8035 ethernet",
 	.phy_id_mask		= AT803X_PHY_ID_MASK,
 	.probe			= at803x_probe,
+	.get_features			= at803x_get_features,
 	.config_init		= at803x_config_init,
 	.set_wol		= at803x_set_wol,
 	.get_wol		= at803x_get_wol,
@@ -382,6 +410,7 @@ static struct phy_driver at803x_driver[] = {
 	.name			= "Atheros 8030 ethernet",
 	.phy_id_mask		= AT803X_PHY_ID_MASK,
 	.probe			= at803x_probe,
+	.get_features			= at803x_get_features,
 	.config_init		= at803x_config_init,
 	.link_change_notify	= at803x_link_change_notify,
 	.set_wol		= at803x_set_wol,

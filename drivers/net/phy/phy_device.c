@@ -7,6 +7,7 @@
  * Copyright (c) 2004 Freescale Semiconductor, Inc.
  */
 
+#define DEBUG
 #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
 
 #include <linux/kernel.h>
@@ -1975,7 +1976,14 @@ int genphy_read_abilities(struct phy_device *phydev)
 			       ARRAY_SIZE(phy_basic_ports_array),
 			       phydev->supported);
 
+/* cubox_dbg */
 	val = phy_read(phydev, MII_BMSR);
+	printk("cubox_dbg: start mii_bmsr: %d, hex: %x", val, val);
+	printk("cubox_dbg: setting new mii_bmsr: %d, hex: %x", val ^ BMSR_ESTATEN, val ^ BMSR_ESTATEN);
+	phy_write(phydev, MII_BMSR, val ^ BMSR_ESTATEN);
+
+	val = phy_read(phydev, MII_BMSR);
+	printk("cubox_dbg: return mii_bmsr: %d, hex: %x", val, val);
 	if (val < 0)
 		return val;
 
@@ -1996,12 +2004,15 @@ int genphy_read_abilities(struct phy_device *phydev)
 		if (val < 0)
 			return val;
 
+/* cubox_dbg */
+/**/
 		linkmode_mod_bit(ETHTOOL_LINK_MODE_1000baseT_Full_BIT,
 				 phydev->supported, val & ESTATUS_1000_TFULL);
 		linkmode_mod_bit(ETHTOOL_LINK_MODE_1000baseT_Half_BIT,
 				 phydev->supported, val & ESTATUS_1000_THALF);
 		linkmode_mod_bit(ETHTOOL_LINK_MODE_1000baseX_Full_BIT,
 				 phydev->supported, val & ESTATUS_1000_XFULL);
+/**/
 	}
 
 	return 0;
