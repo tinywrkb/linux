@@ -7,6 +7,7 @@
  * Copyright (c) 2004 Freescale Semiconductor, Inc.
  */
 
+#define DEBUG
 #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
 
 #include <linux/kernel.h>
@@ -1996,12 +1997,14 @@ int genphy_read_abilities(struct phy_device *phydev)
 		if (val < 0)
 			return val;
 
+/*
 		linkmode_mod_bit(ETHTOOL_LINK_MODE_1000baseT_Full_BIT,
 				 phydev->supported, val & ESTATUS_1000_TFULL);
 		linkmode_mod_bit(ETHTOOL_LINK_MODE_1000baseT_Half_BIT,
 				 phydev->supported, val & ESTATUS_1000_THALF);
 		linkmode_mod_bit(ETHTOOL_LINK_MODE_1000baseX_Full_BIT,
 				 phydev->supported, val & ESTATUS_1000_XFULL);
+*/
 	}
 
 	return 0;
