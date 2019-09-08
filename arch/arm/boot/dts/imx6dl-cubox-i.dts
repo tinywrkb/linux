@@ -49,3 +49,7 @@
 	model = "SolidRun Cubox-i Solo/DualLite";
 	compatible = "solidrun,cubox-i/dl", "fsl,imx6dl";
 };
+
+&ethphy {
+	max-speed = <100>;
+};
